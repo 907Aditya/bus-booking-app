@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mahi Travels | Cargo Records</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f5f5f5;
+    }
+    .table-container {
+      background: white;
+      padding: 20px;
+      margin-top: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .section-title {
+      color: #b31217;
+    }
+    .nav-link {
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-white bg-white border-bottom shadow-sm">
+  <div class="container">
+    <a class="navbar-brand text-danger fw-bold" href="index.html">
+      <img src="https://img.icons8.com/color/48/bus.png" alt="logo" width="24" height="24" class="me-2"/>
+      Mahi Travels
+    </a>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav ms-auto gap-1">
+        <li class="nav-item"><a class="nav-link" href="index.html">🏠 Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="cargo.html">📦 Cargo Form</a></li>
+        <li class="nav-item"><a class="nav-link active text-primary" href="#">📋 Cargo Records</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container table-container">
+  <h2 class="section-title mb-4">📦 All Cargo Bookings</h2>
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover" id="cargoTable">
+      <thead class="table-light">
+        <tr>
+          <th>ID</th>
+          <th>Activity</th>
+          <th>From → To</th>
+          <th>Sender</th>
+          <th>Receiver</th>
+          <th>Payment</th>
+          <th>Booked At</th>
+        </tr>
+      </thead>
+      <tbody id="cargoBody">
+        <tr><td colspan="7" class="text-center text-muted">Loading data...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  async function loadCargoBookings() {
+    const tbody = document.getElementById("cargoBody");
+    try {
+      const response = await fetch("http://localhost:8000/cargo/all");
+      const data = await response.json();
+
+      if (!Array.isArray(data) || data.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="text-center text-muted">No cargo bookings found.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = "";
+      data.forEach(item => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${item.id}</td>
+          <td>${item.activity}</td>
+          <td>${item.from_city} → ${item.to_city}</td>
+          <td>${item.sender_name} <br><small>${item.sender_phone}</small></td>
+          <td>${item.receiver_name} <br><small>${item.receiver_phone}</small></td>
+          <td>${item.payment_type}</td>
+          <td>${new Date(item.created_at).toLocaleString()}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    } catch (err) {
+      console.error("Error loading cargo:", err);
+      tbody.innerHTML = `<tr><td colspan="7" class="text-danger text-center">Failed to load cargo data.</td></tr>`;
+    }
+  }
+
+  loadCargoBookings();
+</script>
+
+</body>
+</html>
