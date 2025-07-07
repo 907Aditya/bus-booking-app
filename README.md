@@ -20,10 +20,10 @@ A complete, responsive web application for booking bus tickets. Built using Angu
 
 | Layer      | Technology Used         |
 |------------|--------------------------|
-| Frontend   | Angular (HTML + Tailwind CSS) |
-| Backend    | Spring Boot (Java)        |
+| Frontend   | js (HTML + Tailwind CSS) |
+| Backend    | FastApi       |
 | Database   | MySQL / H2                |
-| DevOps     | Docker, Kubernetes        |
+| DevOps     | ......       |
 | Versioning | Git, GitHub               |
 
 ---
